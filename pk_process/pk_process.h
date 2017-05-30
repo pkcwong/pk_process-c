@@ -10,7 +10,10 @@
 typedef struct process_t Process;
 typedef struct queue_t Queue;
 
-extern struct queue_t Service;
+extern int (*tick)(void);
+extern const struct queue_t Service;
+extern void service_config(struct queue_t* queue);
+extern void batch_config(struct queue_t* queue);
 
 struct process_t
 {
@@ -39,9 +42,6 @@ void set_kill_flag(struct process_t* this);
 void process_kill(struct process_t* this);
 
 void run(struct queue_t* queue);
-
-void service_config(struct queue_t* queue);
-void batch_config(struct queue_t* queue);
 
 #endif
 

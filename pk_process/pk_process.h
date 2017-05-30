@@ -10,8 +10,8 @@
 typedef struct process_t Process;
 typedef struct queue_t Queue;
 
-extern int (*tick)(void);
-extern const struct queue_t Service;
+extern int (*process_tick)(void);
+extern struct queue_t Service;
 extern void service_config(struct queue_t* queue);
 extern void batch_config(struct queue_t* queue);
 

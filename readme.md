@@ -49,7 +49,7 @@ Each Process is bound with ```onExecute``` and ```onDestroy``` function pointers
 
 Method Declaration | Arguments | Method Description
 --- | --- | ---
-void process_clock | int (\*ticks)(void) | initialize the function pointer to timer
+void process_clock | int (\*process_tick)(void) | initialize the function pointer to timer
 void process_init | Queue\* queue, void (\*run_config)(Queue* queue) | initialize a Queue with run configuration
 Process\*\* process_add| Queue\* queue, void (\*onExecute)(Process\* this), void (\*onDestroy)(Process\* this) | add a Process to Queue
 void set_kill_flag | Process\* this | sets a Process to be terminated on next cycle
@@ -70,7 +70,7 @@ void \*(batch_config)(Queue* queue) | run configuration for batch Queue
 
 This method sets the timer function pointer for the Process library, which initializes the following variable. This is an initialization of the library and must be called on top of library usage.
 ```c
-int (*tick)(void);
+int (*process_tick)(void);
 ```
 The clock function will be used for time logging during Process execution. Sample code as follows.
 ```c
@@ -142,7 +142,7 @@ void myConfig(Queue* queue)
 		}
 		else
 		{
-			queue->process[0].last_tick = tick();	// provide time logging
+			queue->process[0].last_tick = process_tick();	// provide time logging
 			if (queue->process[0].first_tick == 0)	// provide first execution time logging logic
 			{
 				queue->process[0].first_tick = queue->process[0].last_tick;

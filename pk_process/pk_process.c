@@ -1,13 +1,13 @@
 #include "pk_process.h"
 
-int (*tick)(void);
-const Queue Service;
+int (*process_tick)(void);
+Queue Service;
 void service_config(struct queue_t* queue);
 void batch_config(struct queue_t* queue);
 
 void process_clock(int (*ticks)(void))
 {
-	tick = ticks;
+	process_tick = ticks;
 }
 
 void process_init(Queue* queue, void (*run_config)(Queue* queue))
@@ -83,7 +83,7 @@ void service_config(Queue* queue)
 		}
 		else
 		{
-			queue->process[i].last_tick = tick();
+			queue->process[i].last_tick = process_tick();
 			if (queue->process[i].first_tick == 0)
 			{
 				queue->process[i].first_tick = queue->process[i].last_tick;
@@ -106,7 +106,7 @@ void batch_config(Queue* queue)
 		}
 		else
 		{
-			queue->process[0].last_tick = tick();
+			queue->process[0].last_tick = process_tick();
 			if (queue->process[0].first_tick == 0)
 			{
 				queue->process[0].first_tick = queue->process[0].last_tick;

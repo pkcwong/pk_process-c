@@ -12,8 +12,8 @@ typedef struct queue_t Queue;
 
 extern int (*process_tick)(void);
 extern struct queue_t Service;
-extern void service_config(struct queue_t* queue);
-extern void batch_config(struct queue_t* queue);
+extern void service_config(Queue* queue);
+extern void batch_config(Queue* queue);
 
 struct process_t
 {
@@ -22,8 +22,8 @@ struct process_t
 	int last_tick;
 	void (*onExecute)(struct process_t* this);
 	void (*onDestroy)(struct process_t* this);
-	struct queue_t* parent;
-	struct process_t** reference;
+	Queue* parent;
+	Process** reference;
 };
 
 struct queue_t
@@ -35,13 +35,13 @@ struct queue_t
 };
 
 void process_clock(int (*ticks)(void));
-void process_init(struct queue_t* queue, void (*run_config)(struct queue_t* queue));
+void process_init(Queue* queue, void (*run_config)(Queue* queue));
 
-struct process_t** process_add(struct queue_t* queue, void (*onExecute)(struct process_t* this), void (*onDestroy)(struct process_t* this));
-void set_kill_flag(struct process_t* this);
-void process_kill(struct process_t* this);
+Process** process_add(struct queue_t* queue, void (*onExecute)(Process* this), void (*onDestroy)(Process* this));
+void set_kill_flag(Process* this);
+void process_kill(Process* this);
 
-void run(struct queue_t* queue);
+void run(Queue* queue);
 
 #endif
 

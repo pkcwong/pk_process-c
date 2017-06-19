@@ -2,8 +2,8 @@
 
 int (*process_tick)(void);
 Queue Service;
-void service_config(struct queue_t* queue);
-void batch_config(struct queue_t* queue);
+void service_config(Queue* queue);
+void batch_config(Queue* queue);
 
 void process_clock(int (*ticks)(void))
 {

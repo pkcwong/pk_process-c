@@ -16,6 +16,14 @@ void process_init(Queue* queue, void (*run_config)(Queue* queue))
 	queue->run_config = run_config;
 }
 
+void process_reset(Queue* queue)
+{
+	for (int i = 0; i != MAX_QUEUE_SIZE; i++)
+	{
+		queue->reference[i] = NULL;
+	}
+}
+
 Process** process_add(Queue* queue, void (*onExecute)(Process* this), void (*onDestroy)(Process* this))
 {
 	if (queue->size != MAX_QUEUE_SIZE)

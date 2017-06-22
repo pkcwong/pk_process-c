@@ -36,6 +36,7 @@ struct queue_t
 
 void process_clock(int (*ticks)(void));
 void process_init(Queue* queue, void (*run_config)(Queue* queue));
+void process_reset(Queue* queue);
 
 Process** process_add(Queue* queue, void (*onExecute)(Process* this), void (*onDestroy)(Process* this));
 void set_kill_flag(Process* this);

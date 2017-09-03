@@ -3,4 +3,4 @@
 pk_process/pk_process.layout
 pk_process/pk_process.dev
 pk_process/Makefile.win
-pk_process/main.c
+pk_process/main.cpp

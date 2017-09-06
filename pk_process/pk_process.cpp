@@ -92,7 +92,7 @@ void service_config(Queue* queue)
 		}
 		else
 		{
-			if (_clock_ == 0 || queue->reference[i]->period == 0 || _clock_() - queue->reference[i]->last_tick > queue->reference[i]->period)
+			if (_clock_ == 0 || queue->reference[i]->period == 0 || _clock_() - queue->reference[i]->last_tick >= queue->reference[i]->period)
 			{
 				if (_clock_ != 0)
 				{

@@ -37,11 +37,14 @@ class Queue
 	void (*run_config)(Queue* queue);
 
 	Queue(void (*run_config)(Queue* queue));
-	Process* add(void (*onExecute)(Process* ref) = 0, void (*onDestroy)(Process* ref) = 0);
+	Process* add(void (*onExecute)(Process* ref) = 0, void (*onDestroy)(Process* ref) = 0, int period = 0);
 	void run();
 
 };
 
+void process_clock(int (*tick)(void));
+
+extern int (*tick)(void);
 extern Queue Service;
 extern void service_config(Queue* queue);
 

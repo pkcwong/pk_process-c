@@ -1,6 +1,12 @@
 #include "pk_process.h"
 
+int (*_clock_)(void);
 Queue Service(&service_config);
+
+void process_clock(int (*tick)(void))
+{
+	_clock_ = tick;
+}
 
 Process::Process(void (*onExecute)(Process* ref), void (*onDestroy)(Process* ref), int period)
 {
@@ -38,7 +44,7 @@ Queue::Queue(void (*run_config)(Queue* queue))
 	this->size = 0;
 }
 
-Process* Queue::add(void (*onExecute)(Process* ref), void (*onDestroy)(Process* ref))
+Process* Queue::add(void (*onExecute)(Process* ref), void (*onDestroy)(Process* ref), int period)
 {
 	if (this->size != MAX_QUEUE_SIZE)
 	{
@@ -49,7 +55,7 @@ Process* Queue::add(void (*onExecute)(Process* ref), void (*onDestroy)(Process* 
 				this->reference[this->size] = &(this->process[i]);
 				this->process[i].onExecute = onExecute;
 				this->process[i].onDestroy = onDestroy;
-				this->process[i].period = 0;
+				this->process[i].period = period;
 				this->process[i].kill_flag = false;
 				this->process[i].first_tick = 0;
 				this->process[i].last_tick = 0;
@@ -86,9 +92,20 @@ void service_config(Queue* queue)
 		}
 		else
 		{
-			if (queue->reference[i]->onExecute != 0)
+			if (_clock_ == 0 || queue->reference[i]->period == 0 || _clock_() - queue->reference[i]->last_tick > queue->reference[i]->period)
 			{
-				queue->reference[i]->onExecute(queue->reference[i]);
+				if (_clock_ != 0)
+				{
+					queue->reference[i]->last_tick = _clock_();
+				}
+				if (queue->reference[i]->first_tick == 0)
+				{
+					queue->reference[i]->first_tick = queue->reference[i]->last_tick;
+				}
+				if (queue->reference[i]->onExecute != 0)
+				{
+					queue->reference[i]->onExecute(queue->reference[i]);
+				}
 			}
 		}
 	}

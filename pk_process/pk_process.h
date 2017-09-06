@@ -1,7 +1,7 @@
 #ifndef _PK_PROCESS_H
 #define _PK_PROCESS_H
 
-#define MAX_QUEUE_SIZE 16
+#define MAX_QUEUE_SIZE 8
 
 class Process;
 class Queue;
@@ -9,7 +9,8 @@ class Queue;
 class Process
 {
 
-	private:
+	public:
+
 	bool kill_flag;
 	int period;
 	int first_tick;
@@ -19,28 +20,30 @@ class Process
 	Queue* parent;
 	Process** reference;
 
-	public:
-	Process(void (*onExecute)(Process* ref), void (*onDestroy)(Process* ref), int period = 0);
+	Process(void (*onExecute)(Process* ref) = 0, void (*onDestroy)(Process* ref) = 0, int period = 0);
+	void set_kill_flag();
+	void kill();
 
 };
 
 class Queue
 {
 
-	private:
+	public:
+
 	int size;
 	Process process[MAX_QUEUE_SIZE];
 	Process* reference[MAX_QUEUE_SIZE];
+	void (*run_config)(Queue* queue);
 
-	public:
 	Queue(void (*run_config)(Queue* queue));
-	void add(void (*onExecute)(Process* ref), void (*onDestroy)(Process* ref));
+	Process* add(void (*onExecute)(Process* ref) = 0, void (*onDestroy)(Process* ref) = 0);
 	void run();
 
 };
 
-void set_kill_flag(Process* ref);
-void process_kill(Process* ref);
+extern Queue Service;
+extern void service_config(Queue* queue);
 
 #endif
 
